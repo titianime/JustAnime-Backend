@@ -6,7 +6,13 @@ export const exchangeToken = async (req, res) => {
   }
 
   try {
-    const response = await axios.post('https://anilist.co/api/v2/oauth/token', req.body, {
+    // Inject client_secret from backend environment
+    const requestBody = {
+      ...req.body,
+      client_secret: process.env.ANILIST_CLIENT_SECRET
+    };
+
+    const response = await axios.post('https://anilist.co/api/v2/oauth/token', requestBody, {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

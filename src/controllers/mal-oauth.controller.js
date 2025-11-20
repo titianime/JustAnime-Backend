@@ -6,10 +6,16 @@ export const exchangeToken = async (req, res) => {
   }
 
   try {
+    // Inject client_secret from backend environment
+    const requestBody = {
+      ...req.body,
+      client_secret: process.env.MAL_CLIENT_SECRET
+    };
+
     // Convert JSON body to URLSearchParams format for MAL API
     const formData = new URLSearchParams();
-    Object.keys(req.body).forEach(key => {
-      formData.append(key, req.body[key]);
+    Object.keys(requestBody).forEach(key => {
+      formData.append(key, requestBody[key]);
     });
     
     const response = await axios.post('https://myanimelist.net/v1/oauth2/token', formData.toString(), {
